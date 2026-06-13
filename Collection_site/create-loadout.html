@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Create Loadout - ValuableCoins</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">ValuableCoins</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="new-coins.html" class="nav-link">New Coins</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a id="nav-create" href="create-loadout.html" class="nav-link">Create</a>
+        <a href="loadouts.html" class="nav-link">Loadouts</a>
+        <a id="nav-login" href="login.html" class="nav-link">Login</a>
+        <a id="nav-signup" href="signup.html" class="nav-link">Sign Up</a>
+        <a id="nav-profile" href="profile.html" class="nav-link">Profile</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding:28px 0">
+    <h1>Create Loadout</h1>
+    <p class="small">Upload a photo of your valuable money and give it a name. Other players can view and request trades.</p>
+
+    <div id="createBox" style="max-width:640px;margin-top:12px"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© <span id="year6"></span> ValuableCoins</div>
+      <div class="small">Pictures stored locally on your device</div>
+    </div>
+  </footer>
+
+    <script src="server-config.js"></script>
+    <script src="api-client.js"></script>
+    <script src="storage-display.js"></script>
+  <script>
+    document.getElementById('year6').textContent = new Date().getFullYear();
+    const current = VC.getCurrentUser();
+    const box = document.getElementById('createBox');
+    if(!current){
+      box.innerHTML = '<p class="small">You must be signed in to create a loadout. <a href="signup.html">Sign up</a></p>';
+    } else {
+      box.innerHTML = `
+        <form id="loadoutForm">
+          <label>Title<br><input id="title" required style="width:100%;padding:8px;margin-top:6px;border-radius:6px"></label>
+          <label style="display:block;margin-top:10px">Photo<br><input id="file" type="file" accept="image/*" required style="margin-top:6px"></label>
+          <p style="margin-top:12px"><button class="btn primary" type="submit">Upload</button></p>
+          <p id="msg" class="small" style="margin-top:8px"></p>
+        </form>
+      `;
+
+      document.getElementById('loadoutForm').addEventListener('submit', async function(e){
+        e.preventDefault();
+        const title = document.getElementById('title').value.trim();
+        const file = document.getElementById('file').files[0];
+        if(!file){ document.getElementById('msg').textContent = 'Please choose an image.'; return; }
+        
+        // Check storage before upload
+        const canUpload = await VC_canUpload();
+        if (!canUpload) {
+          const storageInfo = await VC_getStorageInfo();
+          if (storageInfo && storageInfo.isFull) {
+            document.getElementById('msg').textContent = '🚫 Storage is full (10GB limit reached). No more uploads allowed.';
+            document.getElementById('msg').style.color = '#f44336';
+          } else {
+            document.getElementById('msg').textContent = '⚠ Not enough storage for this upload.';
+            document.getElementById('msg').style.color = '#FF9800';
+          }
+          return;
+        }
+
+        document.getElementById('msg').textContent = 'Uploading...';
+        document.getElementById('msg').style.color = 'inherit';
+        try{
+          const doc = await VC.createLoadout(current, title, file);
+          document.getElementById('msg').textContent = 'Upload successful!';
+          document.getElementById('msg').style.color = '#4CAF50';
+          setTimeout(()=>{ window.location.href = 'loadouts.html'; }, 800);
+        }catch(err){
+          console.error(err);
+          
+          // Handle specific storage errors
+          if(err.message && err.message.includes('507')) {
+            document.getElementById('msg').textContent = '🚫 Storage full - cannot upload.';
+            document.getElementById('msg').style.color = '#f44336';
+          } else {
+            document.getElementById('msg').textContent = 'Upload failed: '+(err.message||err);
+            document.getElementById('msg').style.color = '#f44336';
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

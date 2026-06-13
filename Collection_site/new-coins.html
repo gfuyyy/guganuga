@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>New Coins - ValuableCoins</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Latest coin listings and highlights">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">ValuableCoins</a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="new-coins.html" class="nav-link">New Coins</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a id="nav-create" href="create-loadout.html" class="nav-link">Create</a>
+        <a href="loadouts.html" class="nav-link">Loadouts</a>
+        <a id="nav-login" href="login.html" class="nav-link">Login</a>
+        <a id="nav-signup" href="signup.html" class="nav-link">Sign Up</a>
+        <a id="nav-profile" href="profile.html" class="nav-link">Profile</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section style="padding:28px 0">
+      <h1>New Coins</h1>
+      <p class="small">Freshly curated coins listed for your review.</p>
+
+      <div class="grid" style="margin-top:18px">
+        <div class="card">
+          <img src="para7.jpg.jpeg" alt="coin" style="width:100%;height:120px;object-fit:cover;border-radius:6px;margin-bottom:8px">
+          <h3>Coin Alpha</h3>
+          <p class="small">Symbol: ALP • Market interest rising</p>
+          <p style="margin-top:8px"><a class="btn primary" href="#">Trade</a></p>
+        </div>
+
+        <div class="card">
+          <img src="para8.jpg.jpeg" alt="coin" style="width:100%;height:120px;object-fit:cover;border-radius:6px;margin-bottom:8px">
+          <h3>Coin Beta</h3>
+          <p class="small">Symbol: BTA • New listing</p>
+          <p style="margin-top:8px"><a class="btn primary" href="#">Trade</a></p>
+        </div>
+
+        <div class="card">
+          <img src="para3.jpg.jpeg" alt="coin" style="width:100%;height:120px;object-fit:cover;border-radius:6px;margin-bottom:8px">
+          <h3>Coin Gamma</h3>
+          <p class="small">Symbol: GMA • Community vote</p>
+          <p style="margin-top:8px"><a class="btn primary" href="#">Trade</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© <span id="year2"></span> ValuableCoins</div>
+      <div class="small">Back to <a href="index.html" style="color:inherit">Home</a></div>
+    </div>
+  </footer>
+  <script src="server-config.js"></script>
+  <script src="api-client.js"></script>
+  <script src="storage-display.js"></script>
+  <script>document.getElementById('year2').textContent = new Date().getFullYear();</script>
+</body>
+</html>

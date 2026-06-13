@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuable Trading Coins</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="Valuable Trading Coins - discover and trade new coins">
+    <style>/* small fallback for very old browsers */</style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="logo" href="index.html">ValuableCoins</a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="new-coins.html" class="nav-link">New Coins</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a id="nav-create" href="create-loadout.html" class="nav-link">Create</a>
+                <a href="loadouts.html" class="nav-link">Loadouts</a>
+                <a href="loadouts.html" class="nav-link">Loadouts</a>
+                <a id="nav-create" href="create-loadout.html" class="nav-link">Create</a>
+                <a id="nav-login" href="login.html" class="nav-link">Login</a>
+                <a id="nav-signup" href="signup.html" class="nav-link">Sign Up</a>
+                <a id="nav-profile" href="profile.html" class="nav-link">Profile</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-inner">
+                <div class="hero-copy">
+                    <h1>Welcome to Valuable Trading Coins</h1>
+                    <p>Discover high-value and trending coins. Curated listings, real-time updates, and secure trading tips to help you make smarter moves.</p>
+                    <p class="hero-ctas">
+                        <a class="btn primary" href="new-coins.html">Explore New Coins</a>
+                        <a class="btn" href="about.html">Learn More</a>
+                    </p>
+                </div>
+
+                <div class="hero-slider">
+                    <div class="slider" id="slider">
+                        <div class="slides">
+                            <div class="slide active" style="background-image:url('para1.jpg.jpeg')"></div>
+                            <div class="slide" style="background-image:url('para3.jpg.jpeg')"></div>
+                            <div class="slide" style="background-image:url('para4.jpg.jpeg')"></div>
+                            <div class="slide" style="background-image:url('para5.jpg.jpeg')"></div>
+                        </div>
+                        <div class="controls" id="dots"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features container">
+            <h2>Why trade with us</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Curated Picks</h3>
+                    <p>We surface coins with strong fundamentals and potential upside.</p>
+                </div>
+                <div class="card">
+                    <h3>Secure Tips</h3>
+                    <p>Guides and best practices to keep your trades safe.</p>
+                </div>
+                <div class="card">
+                    <h3>Fast Updates</h3>
+                    <p>New coin listings and market highlights every day.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>© <span id="year"></span> ValuableCoins</div>
+            <div class="small">Built for trading insights</div>
+        </div>
+    </footer>
+
+    <script src="server-config.js"></script>
+    <script src="api-client.js"></script>
+    <script src="storage-display.js"></script>
+    <script>
+        // year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // slider
+        (function(){
+            const slider = document.getElementById('slider');
+            const slides = [...slider.querySelectorAll('.slide')];
+            const dotsWrap = document.getElementById('dots');
+            let current = 0;
+            const intervalMs = 1000; // 1 second
+            let timer = null;
+
+            function goTo(index){
+                slides[current].classList.remove('active');
+                if(dotsWrap.children[current]) dotsWrap.children[current].classList.remove('active');
+                current = (index + slides.length) % slides.length;
+                slides[current].classList.add('active');
+                if(dotsWrap.children[current]) dotsWrap.children[current].classList.add('active');
+            }
+            function next(){ goTo(current+1); }
+
+            slides.forEach((_, i)=>{
+                const d = document.createElement('button');
+                d.className = 'dot' + (i===0? ' active':'');
+                d.setAttribute('aria-label','Slide '+(i+1));
+                d.addEventListener('click', ()=>{ stop(); goTo(i); start(); });
+                dotsWrap.appendChild(d);
+            });
+
+            function start(){ stop(); timer = setInterval(next, intervalMs); }
+            function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+            slider.addEventListener('mouseenter', stop);
+            slider.addEventListener('mouseleave', start);
+            start();
+        })();
+    </script>
+</body>
+</html>
